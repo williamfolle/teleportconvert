@@ -5,13 +5,18 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #f0f0f0;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    font-family: Arial, sans-serif;
   }
 `;
 
 const theme = {
   colors: {
-    primary: "#0070f3",
+    primary: "#4CAF50",
+    secondary: "#4CAF50",
+    background: "#f0f0f0",
+    text: "#f0f0f0",
   },
 };
 

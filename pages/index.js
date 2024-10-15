@@ -3,21 +3,34 @@ import JSZip from "jszip";
 import styled from "styled-components";
 
 const Container = styled.div`
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 40px 20px;
+`;
+
+const Header = styled.header`
+  text-align: center;
+  margin-bottom: 40px;
 `;
 
 const Title = styled.h1`
-  color: #333;
-  text-align: center;
+  color: ${(props) => props.theme.colors.primary};
+  font-size: 2.5em;
+`;
+
+const Subtitle = styled.p`
+  color: ${(props) => props.theme.colors.secondary};
+  font-size: 1.2em;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #2a2a2a;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const FileInput = styled.input`
@@ -25,7 +38,7 @@ const FileInput = styled.input`
 `;
 
 const Button = styled.button`
-  background-color: #4caf50;
+  background-color: ${(props) => props.theme.colors.primary};
   border: none;
   color: white;
   padding: 15px 32px;
@@ -36,9 +49,10 @@ const Button = styled.button`
   margin: 4px 2px;
   cursor: pointer;
   transition: background-color 0.3s;
+  border-radius: 4px;
 
   &:hover {
-    background-color: #45a049;
+    background-color: ${(props) => props.theme.colors.secondary};
   }
 
   &:disabled {
@@ -49,7 +63,20 @@ const Button = styled.button`
 
 const StatusMessage = styled.p`
   text-align: center;
-  color: ${(props) => (props.error ? "#f44336" : "#4CAF50")};
+  color: ${(props) => (props.error ? "#f44336" : props.theme.colors.primary)};
+  font-weight: bold;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+`;
+
+const Image = styled.img`
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
 `;
 
 export default function Home() {
@@ -132,7 +159,19 @@ export default function Home() {
 
   return (
     <Container>
-      <Title>ZIP File Processor</Title>
+      <Header>
+        <ImageContainer>
+          <Image
+            src="/1.png"
+            alt="Descrição da minha imagem"
+            width={800}
+            height={300}
+          />
+        </ImageContainer>
+        <Subtitle>
+          Upload, process, and download modified ZIP files with ease
+        </Subtitle>
+      </Header>
       <Form onSubmit={handleSubmit}>
         <FileInput type="file" accept=".zip" onChange={handleFileChange} />
         <Button type="submit" disabled={!file || processing}>
@@ -142,6 +181,7 @@ export default function Home() {
       {status && (
         <StatusMessage error={status.includes("Error")}>{status}</StatusMessage>
       )}
+      
     </Container>
   );
 }
