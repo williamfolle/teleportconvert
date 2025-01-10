@@ -135,10 +135,9 @@ export default function Home() {
       // Adicionar novos arquivos
       newZip.file(
         "LLWebServerExtended.js",
-        'console.log("LLWebServerExtended");',
       );
-      newZip.file("scriptcustom.js", 'console.log("scriptcustom");');
-      newZip.file("ew-log-viewer.js", 'console.log("ew-log-viewer");');
+      newZip.file("scriptcustom.js",);
+      newZip.file("ew-log-viewer.js");
 
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
