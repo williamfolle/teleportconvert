@@ -132,13 +132,17 @@ export default function Home() {
         }
       }
 
-      // Adicionar novos arquivos
-      newZip.file(
-        "LLWebServerExtended.js",
-      );
-      newZip.file("scriptcustom.js",);
-      newZip.file("ew-log-viewer.js");
+      // Adicionar novos arquivos do sistema de arquivos
+      const addFileToZip = async (zip, filePath) => {
+        const response = await fetch(filePath);
+        const content = await response.blob();
+        zip.file(filePath, content);
+      };
 
+      await addFileToZip(newZip, "LLWebServerExtended.js");
+      await addFileToZip(newZip, "scriptcustom.js");
+      await addFileToZip(newZip, "ew-log-viewer.js");
+      
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
       const url = window.URL.createObjectURL(blob);
