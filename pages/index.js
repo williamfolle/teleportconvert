@@ -70,12 +70,11 @@ const StatusMessage = styled.p`
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 60px;
-  margin-bottom: 40px;
+  margin-top: 40px;
 `;
 
 const Image = styled.img`
-  max-width: 150%;
+  max-width: 100%;
   height: auto;
   border-radius: 8px;
 `;
@@ -172,10 +171,10 @@ export default function Home() {
       <Header>
         <ImageContainer>
           <Image
-            src="/foto.png"
+            src="/1.png"
             alt="Descrição da minha imagem"
-            width={1000}
-            height={500}
+            width={800}
+            height={300}
           />
         </ImageContainer>
         <Subtitle>
@@ -191,6 +190,7 @@ export default function Home() {
       {status && (
         <StatusMessage error={status.includes("Error")}>{status}</StatusMessage>
       )}
+      
     </Container>
   );
 }
