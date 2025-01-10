@@ -198,7 +198,6 @@ export default function Home() {
       {status && (
         <StatusMessage error={status.includes("Error")}>{status}</StatusMessage>
       )}
-      
     </Container>
   );
 }
