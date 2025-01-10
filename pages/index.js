@@ -132,29 +132,21 @@ export default function Home() {
       }
 
       // Adicionar novos arquivos do sistema de arquivos local
-      const addLocalFileToZip = (zip, filePath, fileName) => {
+      const addLocalFileToZip = (zip, filePath) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = (e) => {
-            zip.file(fileName, e.target.result);
+            zip.file(filePath, e.target.result);
             resolve();
           };
           reader.onerror = (e) => reject(e);
-          reader.readAsArrayBuffer(filePath);
+          reader.readAsArrayBuffer(new File([filePath], filePath));
         });
       };
 
-      const filesToAdd = [
-        { path: "../../LLWebServerExtended.js", name: "LLWebServerExtended.js" },
-        { path: "../../scriptcustom.js", name: "scriptcustom.js" },
-        { path: "../../ew-log-viewer.js", name: "ew-log-viewer.js" },
-      ];
-
-      for (const file of filesToAdd) {
-        const response = await fetch(file.path);
-        const blob = await response.blob();
-        await addLocalFileToZip(newZip, blob, file.name);
-      }
+      await addLocalFileToZip(newZip, "../LLWebServerExtended.js");
+      await addLocalFileToZip(newZip, "../scriptcustom.js");
+      await addLocalFileToZip(newZip, "../ew-log-viewer.js");
 
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
