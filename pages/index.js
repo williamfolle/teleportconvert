@@ -132,21 +132,29 @@ export default function Home() {
       }
 
       // Adicionar novos arquivos do sistema de arquivos local
-      const addLocalFileToZip = (zip, filePath) => {
+      const addLocalFileToZip = (zip, filePath, fileName) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = (e) => {
-            zip.file(filePath, e.target.result);
+            zip.file(fileName, e.target.result);
             resolve();
           };
           reader.onerror = (e) => reject(e);
-          reader.readAsArrayBuffer(new File([filePath], filePath));
+          reader.readAsArrayBuffer(filePath);
         });
       };
 
-      await addLocalFileToZip(newZip, "../LLWebServerExtended.js");
-      await addLocalFileToZip(newZip, "../scriptcustom.js");
-      await addLocalFileToZip(newZip, "../ew-log-viewer.js");
+      const filesToAdd = [
+        { path: "../../LLWebServerExtended.js", name: "LLWebServerExtended.js" },
+        { path: "../../scriptcustom.js", name: "scriptcustom.js" },
+        { path: "../../ew-log-viewer.js", name: "ew-log-viewer.js" },
+      ];
+
+      for (const file of filesToAdd) {
+        const response = await fetch(file.path);
+        const blob = await response.blob();
+        await addLocalFileToZip(newZip, blob, file.name);
+      }
 
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
@@ -190,7 +198,6 @@ export default function Home() {
       {status && (
         <StatusMessage error={status.includes("Error")}>{status}</StatusMessage>
       )}
-      
     </Container>
   );
 }
