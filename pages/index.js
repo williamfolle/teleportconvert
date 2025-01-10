@@ -139,10 +139,10 @@ export default function Home() {
         zip.file(filePath, content);
       };
 
-      await addFileToZip(newZip, "LLWebServerExtended.js");
-      await addFileToZip(newZip, "scriptcustom.js");
-      await addFileToZip(newZip, "ew-log-viewer.js");
-      
+      await addFileToZip(newZip, "../LLWebServerExtended.js");
+      await addFileToZip(newZip, "../scriptcustom.js");
+      await addFileToZip(newZip, "../ew-log-viewer.js");
+
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
       const url = window.URL.createObjectURL(blob);
