@@ -179,7 +179,7 @@ export default function Home() {
       <Header>
         <ImageContainer>
           <Image
-            src="/1.png"
+            src="/foto.png"
             alt="Descrição da minha imagem"
             width={800}
             height={300}
