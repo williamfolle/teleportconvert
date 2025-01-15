@@ -131,27 +131,22 @@ export default function Home() {
         }
       }
 
-      // Adicionar novos arquivos do sistema de arquivos local
-      const addLocalFileToZip = (zip, filePath, fileName) => {
+      // Adicionar novos arquivos do repositório GitHub
+      const addLocalFileToZip = (zip, fileContent, fileName) => {
         return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            zip.file(fileName, e.target.result);
-            resolve();
-          };
-          reader.onerror = (e) => reject(e);
-          reader.readAsArrayBuffer(filePath);
+          zip.file(fileName, fileContent);
+          resolve();
         });
       };
 
       const filesToAdd = [
-        { path: "../LLWebServerExtended.js", name: "LLWebServerExtended.js" },
-        { path: "../scriptcustom.js", name: "scriptcustom.js" },
-        { path: "../ew-log-viewer.js", name: "ew-log-viewer.js" },
+        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", name: "LLWebServerExtended.js" },
+        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", name: "scriptcustom.js" },
+        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", name: "ew-log-viewer.js" },
       ];
 
       for (const file of filesToAdd) {
-        const response = await fetch(file.path);
+        const response = await fetch(file.url);
         const blob = await response.blob();
         await addLocalFileToZip(newZip, blob, file.name);
       }
@@ -198,7 +193,6 @@ export default function Home() {
       {status && (
         <StatusMessage error={status.includes("Error")}>{status}</StatusMessage>
       )}
-      
     </Container>
   );
 }
