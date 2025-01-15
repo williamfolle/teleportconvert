@@ -145,9 +145,9 @@ export default function Home() {
       };
 
       const filesToAdd = [
-        { path: "../../LLWebServerExtended.js", name: "LLWebServerExtended.js" },
-        { path: "../../scriptcustom.js", name: "scriptcustom.js" },
-        { path: "../../ew-log-viewer.js", name: "ew-log-viewer.js" },
+        { path: "../LLWebServerExtended.js", name: "LLWebServerExtended.js" },
+        { path: "../scriptcustom.js", name: "scriptcustom.js" },
+        { path: "../ew-log-viewer.js", name: "ew-log-viewer.js" },
       ];
 
       for (const file of filesToAdd) {
