@@ -102,16 +102,25 @@ export default function Home() {
     try {
       const content = await zip.loadAsync(file);
 
-      // Improved file processing function
+      // Enhanced file processing with content modification
       const processFiles = async () => {
         for (const [path, file] of Object.entries(content.files)) {
-          // Check for 'public' in path and replace with 'img'
-          const newPath = path.includes('public/') ? path.replace('public/', 'img/') : path;
+          let newPath = path.includes('public/') ? path.replace('public/', 'img/') : path;
           
           if (file.dir) {
             newZip.folder(newPath);
           } else {
-            const fileContent = await file.async("uint8array");
+            let fileContent = await file.async("string");
+            
+            // Process content of HTML, CSS, and JS files
+            if (path.endsWith('.html') || path.endsWith('.css') || path.endsWith('.js')) {
+              // Replace all instances of 'public/' with 'img/' in file content
+              fileContent = fileContent.replace(/public\//g, 'img/');
+              // Also handle URL-encoded paths
+              fileContent = fileContent.replace(/public%2F/g, 'img%2F');
+            }
+            
+            // Add the processed file to the new ZIP
             newZip.file(newPath, fileContent);
           }
         }
