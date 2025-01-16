@@ -122,25 +122,40 @@ export default function Home() {
         }
       }
 
-      // Adicionar os três arquivos específicos
-      const fileContents = {
-        "LLWebServerExtended.js": "// Conteúdo do LLWebServerExtended.js",
-        "scriptcustom.js": "// Conteúdo do scriptcustom.js",
-        "ew-log-viewer.js": "// Conteúdo do ew-log-viewer.js"
-      };
+    // Substitua a parte do fileContents por:
 
-      for (const [fileName, content] of Object.entries(fileContents)) {
-        newZip.file(fileName, content);
-      }
+// Adicionar novos arquivos do repositório GitHub
+const filesToAdd = [
+  { 
+    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", 
+    name: "LLWebServerExtended.js" 
+  },
+  { 
+    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", 
+    name: "scriptcustom.js" 
+  },
+  { 
+    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", 
+    name: "ew-log-viewer.js" 
+  }
+];
 
-      // Processar arquivos HTML e CSS
-      for (const [path, file] of Object.entries(newZip.files)) {
-        if (path.endsWith(".html") || path.endsWith(".css")) {
-          let content = await file.async("string");
-          content = content.replace(/public\//g, "img/");
-          newZip.file(path, content);
-        }
-      }
+for (const file of filesToAdd) {
+  try {
+    const response = await fetch(file.url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${file.name}`);
+    }
+    const content = await response.text();
+    newZip.file(file.name, content);
+  } catch (error) {
+    console.error("Error fetching file:", error);
+    setStatus(`Error fetching ${file.name}`);
+    setProcessing(false);
+    return;
+  }
+}
+
 
       // Gerar e baixar o novo ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
