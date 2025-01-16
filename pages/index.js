@@ -102,7 +102,6 @@ export default function Home() {
     try {
       const content = await zip.loadAsync(file);
 
-      // Enhanced file processing with content modification
       const processFiles = async () => {
         for (const [path, file] of Object.entries(content.files)) {
           let newPath = path.includes('public/') ? path.replace('public/', 'img/') : path;
@@ -110,18 +109,18 @@ export default function Home() {
           if (file.dir) {
             newZip.folder(newPath);
           } else {
-            let fileContent = await file.async("string");
-            
-            // Process content of HTML, CSS, and JS files
+            // Check if the file is a text file
             if (path.endsWith('.html') || path.endsWith('.css') || path.endsWith('.js')) {
-              // Replace all instances of 'public/' with 'img/' in file content
+              // Process text files as string and replace paths
+              let fileContent = await file.async("string");
               fileContent = fileContent.replace(/public\//g, 'img/');
-              // Also handle URL-encoded paths
               fileContent = fileContent.replace(/public%2F/g, 'img%2F');
+              newZip.file(newPath, fileContent);
+            } else {
+              // Handle binary files (images) with uint8array
+              const fileContent = await file.async("uint8array");
+              newZip.file(newPath, fileContent);
             }
-            
-            // Add the processed file to the new ZIP
-            newZip.file(newPath, fileContent);
           }
         }
       };
