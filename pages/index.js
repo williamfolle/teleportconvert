@@ -132,23 +132,26 @@ export default function Home() {
       }
 
       // Adicionar novos arquivos do repositório GitHub
-      const addLocalFileToZip = (zip, fileContent, fileName) => {
-        return new Promise((resolve, reject) => {
-          zip.file(fileName, fileContent);
-          resolve();
-        });
-      };
-
       const filesToAdd = [
-        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", name: "LLWebServerExtended.js" },
-        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", name: "scriptcustom.js" },
-        { url: "https://github.com/williamfolle/teleportconvert/blob/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", name: "ew-log-viewer.js" },
+        { url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", name: "LLWebServerExtended.js" },
+        { url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", name: "scriptcustom.js" },
+        { url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9 f972ce84153343/ew-log-viewer.js", name: "ew-log-viewer.js" },
       ];
 
       for (const file of filesToAdd) {
-        const response = await fetch(file.url);
-        const blob = await response.blob();
-        await addLocalFileToZip(newZip, blob, file.name);
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${file.name}: ${response.statusText}`);
+          }
+          const blob = await response.blob();
+          newZip.file(file.name, blob);
+        } catch (error) {
+          console.error("Error fetching file:", error);
+          setStatus(`Error fetching ${file.name}. Please try again.`);
+          setProcessing(false);
+          return; // Para evitar continuar o processamento se houver um erro
+        }
       }
 
       // Gerar e baixar o novo ZIP
