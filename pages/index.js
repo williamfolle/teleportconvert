@@ -102,62 +102,56 @@ export default function Home() {
     try {
       const content = await zip.loadAsync(file);
 
-      // Renomear a pasta 'public' para 'img'
-      for (const [path, file] of Object.entries(content.files)) {
-        if (path.startsWith("public/")) {
-          const newPath = path.replace("public/", "img/");
+      // Improved file processing function
+      const processFiles = async () => {
+        for (const [path, file] of Object.entries(content.files)) {
+          // Check for 'public' in path and replace with 'img'
+          const newPath = path.includes('public/') ? path.replace('public/', 'img/') : path;
+          
           if (file.dir) {
             newZip.folder(newPath);
           } else {
-            const content = await file.async("uint8array");
-            newZip.file(newPath, content);
+            const fileContent = await file.async("uint8array");
+            newZip.file(newPath, fileContent);
           }
-        } else {
-          if (file.dir) {
-            newZip.folder(path);
-          } else {
-            const content = await file.async("uint8array");
-            newZip.file(path, content);
+        }
+      };
+
+      await processFiles();
+
+      // Add GitHub files
+      const filesToAdd = [
+        { 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", 
+          name: "LLWebServerExtended.js" 
+        },
+        { 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", 
+          name: "scriptcustom.js" 
+        },
+        { 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", 
+          name: "ew-log-viewer.js" 
+        }
+      ];
+
+      for (const file of filesToAdd) {
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${file.name}`);
           }
+          const content = await response.text();
+          newZip.file(file.name, content);
+        } catch (error) {
+          console.error("Error fetching file:", error);
+          setStatus(`Error fetching ${file.name}`);
+          setProcessing(false);
+          return;
         }
       }
 
-    // Substitua a parte do fileContents por:
-
-// Adicionar novos arquivos do repositório GitHub
-const filesToAdd = [
-  { 
-    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", 
-    name: "LLWebServerExtended.js" 
-  },
-  { 
-    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", 
-    name: "scriptcustom.js" 
-  },
-  { 
-    url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", 
-    name: "ew-log-viewer.js" 
-  }
-];
-
-for (const file of filesToAdd) {
-  try {
-    const response = await fetch(file.url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${file.name}`);
-    }
-    const content = await response.text();
-    newZip.file(file.name, content);
-  } catch (error) {
-    console.error("Error fetching file:", error);
-    setStatus(`Error fetching ${file.name}`);
-    setProcessing(false);
-    return;
-  }
-}
-
-
-      // Gerar e baixar o novo ZIP
+      // Generate and download ZIP
       const blob = await newZip.generateAsync({ type: "blob" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
