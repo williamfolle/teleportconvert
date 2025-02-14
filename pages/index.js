@@ -130,15 +130,15 @@ export default function Home() {
       // Add GitHub files
       const filesToAdd = [
         { 
-          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/LLWebServerExtended.js", 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/a49f2eac33fee94ce0bc2d2b22af8d9e73e8f773/LLWebServerExtended.js", 
           name: "LLWebServerExtended.js" 
         },
         { 
-          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/scriptcustom.js", 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/a49f2eac33fee94ce0bc2d2b22af8d9e73e8f773/scriptcustom.js", 
           name: "scriptcustom.js" 
         },
         { 
-          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/870f545678d13bd978cecc27f9f972ce84153343/ew-log-viewer.js", 
+          url: "https://raw.githubusercontent.com/williamfolle/teleportconvert/a49f2eac33fee94ce0bc2d2b22af8d9e73e8f773/ew-log-viewer.js", 
           name: "ew-log-viewer.js" 
         }
       ];
