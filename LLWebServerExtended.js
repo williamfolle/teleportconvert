@@ -23,7 +23,7 @@ const HTTP_STATUS = {
 
 var m_imgsVarsMap = {};
 var m_nextAutoID = 0;
-
+//ultima modifica 
 // event on page loading
 document.addEventListener('DOMContentLoaded', InitWriteControls, false);
 
